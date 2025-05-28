@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.card {
+    @apply bg-surface dark:bg-surface-dark p-4 rounded shadow-md;
+}
+
+@layer base {
+    input,
+    textarea,
+    select {
+        @apply bg-white dark:bg-background-dark text-text dark:text-secondary border border-gray-300 dark:border-gray-600 px-3 py-2 rounded outline-none;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+        @apply ring-2 ring-accent;
+    }
+}
+
+@layer components {
+    .btn {
+        @apply px-4 py-2 rounded-full text-white font-semibold shadow-md transition;
+    }
+    .btn-primary {
+        @apply bg-primary text-black px-4 py-2 rounded;
+    }
+    .btn-secondary {
+        @apply bg-secondary text-black px-4 py-2 rounded;
+    }
+    .btn-primary:hover {
+        @apply opacity-50;
+    }
+    .btn-secondary:hover {
+        @apply opacity-50;
+    }
+
+}

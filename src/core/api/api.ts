@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useAuthStore } from '@/features/user/store/authStore';
-import {notify} from "@/utils/notify.ts";
-import {logEvent} from "@/utils/logEvent.ts";
+import {notify} from "@/core/services/notify.ts";
+import {logError} from "@/core/services/logEvent.ts";
 
 const API = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
@@ -31,7 +31,7 @@ API.interceptors.response.use(
 
         notify.error(message);
 
-        logEvent('error', message, {
+        logError(message, {
             url: error?.config?.url,
             method: error?.config?.method,
             status: error?.response?.status,

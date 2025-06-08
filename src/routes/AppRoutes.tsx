@@ -4,6 +4,7 @@ import type {JSX} from "react";
 import {useAuthStore} from "@/features/user/store/authStore.ts";
 import {CreateMealPlanPage} from "@/features/user/pages/CreateMealPlanPage.tsx";
 import {AdminDashboardPage} from "@/features/user/pages/AdminDashboardPage.tsx";
+import {MealPlanHoldingPage} from "@/features/user/pages/MealPlanHoldingPage.tsx";
 // import other pages here
 
 export function AppRoutes(): JSX.Element {
@@ -17,7 +18,7 @@ export function AppRoutes(): JSX.Element {
                 <Route path="/" element={<WelcomePage />} />
                 {/* Guest User can access this */}
                 <Route path="/create" element={<CreateMealPlanPage />} />
-
+                <Route path="/mealplan-waiting" element={<MealPlanHoldingPage />} />
                 {/* Admin-Only Route */}
                 <Route
                     path="/admin"

@@ -1,31 +1,51 @@
-import { Search, Plus, MessageSquare } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Search, Plus, MessageSquare, ArrowLeft, LogOut } from 'lucide-react';
+import { useAuthStore } from '@/features/user/store/authStore';
 
 export function TopNav() {
+    const { roles, logout } = useAuthStore();
+    const isAdmin = roles?.includes('ADMIN');
+    const isGuest = roles?.includes('GUEST');
+    const navigate = useNavigate();
+
     return (
         <header className="fixed top-0 inset-x-0 h-14 bg-surface-dark shadow flex items-center justify-between px-4 z-20">
             <div className="flex items-center gap-2">
                 <img
                     src="/logos/coachcoshlogo-black.png"
-                    alt="Snookernet"
-                    className="h-10 w-auto max-w-[160px] block dark:hidden"
-                />
-                <img
-                    src="/logos/coachcoshlogo-black.png"
-                    alt="Snookernet (Light)"
-                    className="h-10 w-auto max-w-[160px] hidden dark:block"
+                    alt="Coach Cosh"
+                    className="h-10 w-auto max-w-[160px]"
                 />
             </div>
 
             <div className="flex items-center gap-4 text-secondary">
-                <button title="Start Match">
-                    <Plus className="w-6 h-6"/>
-                </button>
-                <button title="Search">
-                    <Search className="w-6 h-6" />
-                </button>
-                <button title="Messages">
-                    <MessageSquare className="w-6 h-6" />
-                </button>
+                {isAdmin && (
+                    <>
+                        <button title="Start Match">
+                            <Plus className="w-6 h-6" />
+                        </button>
+                        <button title="Search">
+                            <Search className="w-6 h-6" />
+                        </button>
+                        <button title="Messages">
+                            <MessageSquare className="w-6 h-6" />
+                        </button>
+                    </>
+                )}
+
+                {isGuest && (
+                    <>
+                        <button title="Back" onClick={() => navigate(-1)}>
+                            <ArrowLeft className="w-6 h-6" />
+                        </button>
+                        <button title="Logout" onClick={() => {
+                            logout();
+                            navigate('/');
+                        }}>
+                            <LogOut className="w-6 h-6" />
+                        </button>
+                    </>
+                )}
             </div>
         </header>
     );

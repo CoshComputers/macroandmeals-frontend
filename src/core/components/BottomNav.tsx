@@ -1,10 +1,12 @@
-import { Users, CircleDot, UserCircle } from 'lucide-react';
+import {Users, CircleDot, UserCircle, Home} from 'lucide-react';
 
 export function BottomNav() {
     return (
         <nav className="fixed bottom-0 inset-x-0 h-16 bg-surface-dark shadow-inner flex justify-around items-center z-20 border-t border-border dark:border-border-dark">
             {/* Home (logo icon) */}
-            <NavButton label="Home" isImage src="/logos/SnookerNetLogoOnly.png" />
+            <NavButton label="Home">
+                <Home className="w-6 h-6" />
+            </NavButton>
 
             {/* Friends */}
             <NavButton label="Friends">

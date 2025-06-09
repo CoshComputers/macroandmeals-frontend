@@ -4,6 +4,8 @@ import {type EnumOption, useEnumStore} from '@/core/store/enumStore';
 import type { components } from '@/core/types/api';
 import { submitProfile } from '@/features/user/services/userService';
 import { logWarn } from '@/core/services/logEvent';
+import {useMealPlanStore} from "@/features/user/store/mealPlanStore.ts";
+import {mealFrequencyToNumber} from "@/utils/converters.ts";
 
 type CreateUserProfileEntryRequestDTO = components['schemas']['CreateUserProfileEntryRequestDTO'];
 
@@ -26,6 +28,8 @@ export function CreateMealPlanForm() {
     const onSubmit = async (data: CreateUserProfileEntryRequestDTO) => {
         try {
             await submitProfile(data);
+            const mealsPerDay = mealFrequencyToNumber(data.mealFrequency);
+            useMealPlanStore.getState().startPlanGeneration(mealsPerDay);
             navigate('/mealplan-waiting');
         } catch (err) {
             logWarn(err instanceof Error ? err.message : 'Something went wrong.');

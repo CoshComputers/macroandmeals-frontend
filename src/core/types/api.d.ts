@@ -148,6 +148,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/mealplan/user-profile/{profileId}/mealplan": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getMealPlanProgress"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/enums/visibility": {
         parameters: {
             query?: never;
@@ -396,7 +412,7 @@ export interface components {
             dietaryNotes?: string;
             coachNotes?: string;
             /** @enum {string} */
-            mealPlanStatus?: "PENDING" | "COMPLETED" | "FAILED";
+            mealPlanStatus?: "PENDING" | "MACROS_SET" | "COMPLETED" | "FAILED";
             /** Format: date-time */
             createdAt?: string;
             /** Format: date-time */
@@ -404,7 +420,7 @@ export interface components {
         };
         MealPlanStatusResponseDTO: {
             /** @enum {string} */
-            status?: "PENDING" | "COMPLETED" | "FAILED";
+            status?: "PENDING" | "MACROS_SET" | "COMPLETED" | "FAILED";
         };
         SseEmitter: {
             /** Format: int64 */
@@ -445,6 +461,11 @@ export interface components {
             dayNumber?: number;
             mealType?: string;
             meal?: components["schemas"]["MealDTO"];
+        };
+        MealPlanProgressDTO: {
+            /** @enum {string} */
+            status?: "PENDING" | "MACROS_SET" | "COMPLETED" | "FAILED";
+            data?: unknown;
         };
         EnumOption: {
             value?: string;
@@ -682,7 +703,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["SseEmitter"];
+                    "text/event-stream": components["schemas"]["SseEmitter"];
                 };
             };
         };
@@ -725,6 +746,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["MealPlanDTO"];
+                };
+            };
+        };
+    };
+    getMealPlanProgress: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                profileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MealPlanProgressDTO"];
                 };
             };
         };

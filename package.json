@@ -13,8 +13,10 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.4",
+    "@microsoft/fetch-event-source": "^2.0.1",
     "axios": "^1.9.0",
     "clsx": "^2.1.1",
+    "event-source-polyfill": "^1.0.31",
     "lucide-react": "^0.511.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -25,6 +27,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
+    "@types/event-source-polyfill": "^1.0.5",
     "@types/node": "^22.15.30",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",

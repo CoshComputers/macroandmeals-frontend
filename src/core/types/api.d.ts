@@ -364,7 +364,9 @@ export interface components {
             allergies?: ("PEANUTS" | "TREE_NUTS" | "DAIRY" | "EGGS" | "FISH" | "SHELLFISH" | "SOY" | "WHEAT" | "GLUTEN" | "SESAME" | "OTHER")[];
             dietaryNotes?: string;
         };
-        MessageResponse: {
+        CreateProfileEntryResponseDTO: {
+            /** Format: int64 */
+            profileId?: number;
             message?: string;
         };
         LoginRequestDTO: {
@@ -376,12 +378,17 @@ export interface components {
             email?: string;
             name?: string;
             roles?: string[];
+            /** Format: int64 */
+            profileId?: number;
         };
         CreateUserRequestDTO: {
             name?: string;
             email?: string;
             password?: string;
             roles?: ("USER" | "GUEST" | "ADMIN" | "SUPER_ADMIN")[];
+        };
+        MessageResponse: {
+            message?: string;
         };
         UpdateUserProfileEntryRequestDTO: {
             dietaryNotes?: string;
@@ -519,7 +526,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["MessageResponse"];
+                    "*/*": components["schemas"]["CreateProfileEntryResponseDTO"];
                 };
             };
         };

@@ -2,16 +2,19 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import {type EnumOption, useEnumStore} from '@/core/store/enumStore';
 import type { components } from '@/core/types/api';
-import { submitProfile } from '@/features/user/services/userService';
+import { submitProfile } from '@/features/userandmeals/services/userService';
 import { logWarn } from '@/core/services/logEvent';
-import {useMealPlanStore} from "@/features/user/store/mealPlanStore.ts";
+import {useMealPlanStore} from "@/features/userandmeals/store/mealPlanStore.ts";
 import {mealFrequencyToNumber} from "@/utils/converters.ts";
+import {notify} from "@/core/services/notify.ts";
+import {useProfileFormStore} from "@/features/userandmeals/store/userProfileStore.ts";
 
 type CreateUserProfileEntryRequestDTO = components['schemas']['CreateUserProfileEntryRequestDTO'];
 
 export function CreateMealPlanForm() {
     const navigate = useNavigate();
     const { getEnumOptions } = useEnumStore();
+    const { profileData, setProfileData } = useProfileFormStore();
 
     const {
         register,
@@ -19,17 +22,19 @@ export function CreateMealPlanForm() {
         formState: { errors, isValid, isSubmitting },
     } = useForm<CreateUserProfileEntryRequestDTO>({
         mode: 'onChange',
-        defaultValues: {
-            dietaryNotes: '',
-            allergies: [],
-        },
+        defaultValues: profileData
     });
 
     const onSubmit = async (data: CreateUserProfileEntryRequestDTO) => {
         try {
-            await submitProfile(data);
+            setProfileData(data); // store in state before API call
+            const response = await submitProfile(data);
+            if (!response.profileId) {
+                throw new Error("No profileId returned from backend");
+            }
             const mealsPerDay = mealFrequencyToNumber(data.mealFrequency);
-            useMealPlanStore.getState().startPlanGeneration(mealsPerDay);
+            useMealPlanStore.getState().startPlanGeneration(mealsPerDay, response.profileId);
+            notify.info("Profile created, your meal plan is on it's way.");
             navigate('/mealplan-waiting');
         } catch (err) {
             logWarn(err instanceof Error ? err.message : 'Something went wrong.');
@@ -132,7 +137,7 @@ export function CreateMealPlanForm() {
             {renderSelect('activityLevel', 'Activity Level')}
             {renderSelect('jobActivityLevel', 'Job Activity Level')}
             {renderSelect('mealFrequency', 'Meals per Day')}
-            {renderSelect('dietaryPreference', 'Dietary Preference', false)}
+            {renderSelect('dietaryPreference', 'Dietary Preference')}
 
             {/* Allergies as checkboxes */}
             <fieldset className="mb-4">
@@ -142,7 +147,7 @@ export function CreateMealPlanForm() {
                         <label key={`allergen-${opt.value}`} className="flex items-center gap-2">
                             <input
                                 type="checkbox"
-                                value={`allergen-${opt.value}`}
+                                value={opt.value}
                                 {...register('allergies')}
                                 className="accent-black"
                             />
@@ -171,6 +176,18 @@ export function CreateMealPlanForm() {
             >
                 {isSubmitting ? 'Submitting...' : 'Generate Meal Plan'}
             </button>
+            <button
+                type="reset"
+                onClick={() => {
+                    if (confirm("Clear the form and start again?")) {
+                        useProfileFormStore.getState().clearProfileData(); // Clear the DTO
+                        navigate('/create'); // Navigate to form, replacing history
+                    }
+                }}
+                className="mt-6 ml-8 px-4 py-2 text-white bg-secondary rounded hover:bg-secondary-dark transition">
+                Reset
+            </button>
+
         </form>
     );
 }

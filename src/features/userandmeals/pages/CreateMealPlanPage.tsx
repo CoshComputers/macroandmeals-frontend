@@ -1,5 +1,5 @@
 import { Layout } from '@/core/components/Layout';
-import { CreateMealPlanForm } from '@/features/user/components/CreateMealPlanForm';
+import { CreateMealPlanForm } from '@/features/userandmeals/components/CreateMealPlanForm';
 
 export function CreateMealPlanPage() {
     return (

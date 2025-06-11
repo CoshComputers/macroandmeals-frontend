@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useAuthStore } from '@/features/user/store/authStore';
+import { useAuthStore } from '@/features/userandmeals/store/authStore';
 import {notify} from "@/core/services/notify.ts";
 import {logError} from "@/core/services/logEvent.ts";
 

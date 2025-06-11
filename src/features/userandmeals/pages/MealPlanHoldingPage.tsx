@@ -1,7 +1,9 @@
 import {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Layout } from '@/core/components/Layout';
-import { useMealPlanStore } from '@/features/user/store/mealPlanStore';
+import { useMealPlanStore } from '@/features/userandmeals/store/mealPlanStore';
+
+
 
 export function MealPlanHoldingPage() {
     const navigate = useNavigate();
@@ -16,11 +18,7 @@ export function MealPlanHoldingPage() {
     const [progress, setProgress] = useState(0);
 
     useEffect(() => {
-        const url = new URL(window.location.href);
-        const profileId = Number(url.searchParams.get('id'));
-        if (profileId) {
-            hydrate(profileId);
-        }
+        hydrate()
     }, [hydrate]);
 
     useEffect(() => {
@@ -58,15 +56,8 @@ export function MealPlanHoldingPage() {
                     We're cooking up your personalised meal plan...
                 </h2>
 
-                {/* Spinner */}
-                <div className="mb-6">
-                    <span className="animate-spin inline-block w-10 h-10 border-4 border-t-transparent border-secondary rounded-full"></span>
-                </div>
-
-                {/* Optional fake progress bar here */}
-
                 <p className="text-gray-600 max-w-md mb-8">
-                    This usually takes 20–30 seconds. Hang tight!
+                    This usually takes 1, to 2 Minutes. Hang tight!
                 </p>
 
                 {/* Show macro summary once it's generated */}
@@ -82,13 +73,24 @@ export function MealPlanHoldingPage() {
                     </div>
                 )}
 
-                {/*Fake Progress bar to give human feedback and flatten out progress*/}
+                {/* Fake Progress Bar */}
                 <div className="w-full max-w-md bg-gray-200 rounded-full h-4 mb-6">
                     <div
                         className="bg-secondary h-4 rounded-full transition-all duration-300 ease-out"
                         style={{ width: `${progress}%` }}
                     />
                 </div>
+
+                {/* Spinner + Message ONLY shown at 90%+ */}
+                {progress >= 90 && (
+                    <div className="flex flex-col items-center text-center mb-6 animate-fade-in">
+                        <span className="animate-spin inline-block w-10 h-10 border-4 border-t-transparent border-secondary rounded-full mb-2"></span>
+                        <p className="text-sm text-gray-600">
+                            This is taking a little longer than usual. Please hang tight – it won't be long!
+                        </p>
+                    </div>
+                )}
+
 
                 {/* Tips & Tricks */}
                 <div className="w-full max-w-md bg-gray-100 rounded-md shadow p-4">

@@ -1,4 +1,4 @@
-import type {MacroSummaryDTO} from "@/features/user/dtos/MacroSummaryDTO.ts";
+import type {MacroSummaryDTO} from "@/features/userandmeals/dtos/MacroSummaryDTO.ts";
 import type {components} from "@/core/types/api";
 
 type MealPlanDTO = components['schemas']['MealPlanDTO'];

@@ -1,11 +1,11 @@
 // streamService.ts
 
 import { fetchEventSource } from '@microsoft/fetch-event-source';
-import { useAuthStore } from '@/features/user/store/authStore';
+import { useAuthStore } from '@/features/userandmeals/store/authStore';
 import { notify } from '@/core/services/notify';
 import { logInfo, logWarn } from '@/core/services/logEvent';
-import { useMealPlanStore } from '@/features/user/store/mealPlanStore';
-import type { MacroSummaryDTO } from '@/features/user/dtos/MacroSummaryDTO';
+import { useMealPlanStore } from '@/features/userandmeals/store/mealPlanStore';
+import type { MacroSummaryDTO } from '@/features/userandmeals/dtos/MacroSummaryDTO';
 
 let abortController: AbortController | null = null;
 

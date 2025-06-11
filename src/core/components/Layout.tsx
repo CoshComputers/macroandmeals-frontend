@@ -1,5 +1,5 @@
 import type {ReactNode} from 'react';
-import { useAuthStore } from '@/features/user/store/authStore';
+import { useAuthStore } from '@/features/userandmeals/store/authStore';
 import { TopNav } from './TopNav';
 import { BottomNav } from './BottomNav';
 

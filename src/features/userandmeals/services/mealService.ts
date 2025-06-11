@@ -1,6 +1,6 @@
 import type {components} from "@/core/types/api";
 import API from "@/core/api/api.ts";
-import type {MacroSummaryDTO} from "@/features/user/dtos/MacroSummaryDTO.ts";
+import type {MacroSummaryDTO} from "@/features/userandmeals/dtos/MacroSummaryDTO.ts";
 import {isMacroSummary, isMealPlan} from "@/utils/typeGuards.ts";
 
 

@@ -1,9 +1,9 @@
 // mealPlanStore.ts
 import { create } from 'zustand';
-import type { MacroSummaryDTO } from '@/features/user/dtos/MacroSummaryDTO';
+import type { MacroSummaryDTO } from '@/features/userandmeals/dtos/MacroSummaryDTO';
 import { streamService } from '@/core/services/streamService';
 import type {components} from "@/core/types/api";
-import {hydrateMealPlan} from "@/features/user/services/mealService.ts";
+import {hydrateMealPlan} from "@/features/userandmeals/services/mealService.ts";
 import {notify} from "@/core/services/notify.ts";
 import {logError} from "@/core/services/logEvent.ts";
 
@@ -14,14 +14,15 @@ type MealPlanDTO = components['schemas']['MealPlanDTO'];
 
 
 interface MealPlanState {
+    profileId: number;
     phase: MealPlanPhase;
     macroSummary: MacroSummaryDTO | null;
     mealPlan: MealPlanDTO | null;
     progressMealsPerDay: number | null;
     error: string | null;
-    hydrate: (profileId: number) => Promise<void>;
+    hydrate: () => Promise<void>;
     setPhase: (phase: MealPlanPhase) => void;
-    startPlanGeneration: (mealFrequency: number) => void;
+    startPlanGeneration: (mealFrequency: number, profileId: number) => void;
     stopPlanGeneration: () => void;
     setMacros: (macros: MacroSummaryDTO) => void;
     fail: (error: string) => void;
@@ -30,7 +31,8 @@ interface MealPlanState {
 
 
 
-export const useMealPlanStore = create<MealPlanState>((set) => ({
+export const useMealPlanStore = create<MealPlanState>((set, get) => ({
+    profileId: 0,
     phase: 'IDLE',
     macroSummary: null,
     mealPlan: null,
@@ -39,10 +41,11 @@ export const useMealPlanStore = create<MealPlanState>((set) => ({
 
     setPhase: (phase) => set({ phase }),
 
-    startPlanGeneration: (mealsPerDay: number) => {
+    startPlanGeneration: (mealsPerDay: number, profileId: number) => {
         set({ phase: 'WAITING_MACROS',
             error: null,
-            progressMealsPerDay: mealsPerDay,});
+            progressMealsPerDay: mealsPerDay,
+            profileId: profileId});
         streamService.start();
     },
 
@@ -53,7 +56,14 @@ export const useMealPlanStore = create<MealPlanState>((set) => ({
     setMacros: (macros) => set({ macroSummary: macros, phase: 'WAITING_MEALS' }),
     fail: (error) => set({ phase: 'FAILED', error }),
     reset: () => set({ phase: 'IDLE', macroSummary: null, error: null }),
-    hydrate: async (profileId) => {
+    hydrate: async () => {
+        const profileId = get().profileId;
+        if (!profileId) {
+            logError('No profileId available to hydrate meal plan');
+            set({ phase: 'FAILED', error: 'No profile found for meal plan hydration' });
+            return;
+        }
+
         try {
             const { status, data } = await hydrateMealPlan(profileId);
 

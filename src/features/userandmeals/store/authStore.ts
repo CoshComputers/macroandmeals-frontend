@@ -6,6 +6,7 @@ type LoginResponseDTO = components['schemas']['LoginResponseDTO'];
 
 interface AuthState {
     token: string | null;
+    userId: number | null;
     email: string | null;
     name: string | null;
     roles: string[];
@@ -21,6 +22,7 @@ export const useAuthStore = create<AuthState>()(
             token: null,
             email: null,
             name: null,
+            userId: null,
             roles: [],
             isAuthenticated: false,
 
@@ -29,6 +31,7 @@ export const useAuthStore = create<AuthState>()(
                     token: data.token,
                     email: data.email,
                     name: data.name,
+                    userId: data.profileId,
                     roles: Array.from(data.roles ?? []),
                     isAuthenticated: true,
                 });

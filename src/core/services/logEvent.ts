@@ -1,6 +1,6 @@
 // src/core/utils/logEvent.ts
 import LoggingAPI from '@/core/api/logging.ts';
-import { useAuthStore } from '@/features/user/store/authStore.ts';
+import { useAuthStore } from '@/features/userandmeals/store/authStore.ts';
 
 const LEVEL_PRIORITY = ['debug', 'info', 'warn', 'error'] as const;
 type LogLevel = typeof LEVEL_PRIORITY[number];

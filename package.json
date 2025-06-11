@@ -12,11 +12,16 @@
     "generate:types": "openapi-typescript http://localhost:8080/v3/api-docs -o src/core/types/api.d.ts"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@headlessui/react": "^2.2.4",
     "@microsoft/fetch-event-source": "^2.0.1",
+    "@mui/material": "^7.1.1",
     "axios": "^1.9.0",
     "clsx": "^2.1.1",
+    "embla-carousel-react": "^8.6.0",
     "event-source-polyfill": "^1.0.31",
+    "html2pdf.js": "^0.10.3",
     "lucide-react": "^0.511.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

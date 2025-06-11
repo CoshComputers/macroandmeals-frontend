@@ -2,10 +2,10 @@ import { Dialog } from '@headlessui/react';
 import { X } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '@/features/user/store/authStore';
+import { useAuthStore } from '@/features/userandmeals/store/authStore';
 import { loginUser, createGuest } from '@/core/services/authService';
-import {fetchInitialUserData} from "@/features/user/services/userService.ts";
-import {logWarn} from "@/core/services/logEvent.ts";
+import {fetchInitialUserData} from "@/features/userandmeals/services/userService.ts";
+import {logDebug, logWarn} from "@/core/services/logEvent.ts";
 
 type AuthMode = 'login' | 'guest';
 
@@ -30,6 +30,7 @@ export function AuthDialog({ isOpen, onClose, mode }: AuthDialogProps) {
                 : await loginUser({ email, password });
 
             login(response);
+            logDebug("Login Response: ", {response});
             await fetchInitialUserData(); // Pull enums before UI depends on them
 
             onClose();

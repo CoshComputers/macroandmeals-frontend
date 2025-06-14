@@ -49,5 +49,4 @@ jobs:
         run: |
           aws s3 sync dist/ s3://$BUCKET_NAME/ \
             --delete \
-            --cache-control "no-cache" \
-            --acl public-read
+            --cache-control "no-cache"

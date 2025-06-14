@@ -46,7 +46,8 @@ jobs:
 
       # Step 4: Output the new version (for logging)
       - name: Echo Version
-        run: echo "New version: ${{ env.BUMPED_VERSION }}"
+        run: |
+          echo "New version: ${{ env.BUMPED_VERSION }}"
 
       # Step 5: Commit the version.txt change back to the master branch
       - name: Commit version bump

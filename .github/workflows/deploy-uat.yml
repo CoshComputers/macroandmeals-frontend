@@ -1,0 +1,53 @@
+name: Build and Deploy Frontend (UAT)
+
+# Trigger on push to master, or manually via GitHub UI
+on:
+  workflow_dispatch:
+
+# Permissions: Only read access needed here
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    name: Build and Upload to S3
+    runs-on: ubuntu-latest
+
+    env:
+      BUCKET_NAME: ${{ secrets.S3_UAT_BUCKET_NAME }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+
+    steps:
+      # Step 1: Checkout repo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Step 3: Install project dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Step 4: Build the React app with Vite using UAT mode
+      - name: Build Vite App (UAT Mode)
+        run: npm run build -- --mode uat
+
+      # Step 5: Configure AWS credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_ACCESS_SECRET_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # Step 6: Sync build output to S3 bucket
+      - name: Upload to S3 (UAT)
+        run: |
+          aws s3 sync dist/ s3://$BUCKET_NAME/ \
+            --delete \
+            --cache-control "no-cache" \
+            --acl public-read
